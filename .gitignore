@@ -1,6 +1,5 @@
 /node_modules
 .idea/
-.idea
 *.bak
 *.pyc
 dist
