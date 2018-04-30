@@ -19,7 +19,7 @@ class GoodsCategory(models.Model):
     code = models.CharField(max_length=30, default="", verbose_name='类别code', help_text='类别code')
     desc = models.TextField(default="", verbose_name="类别描述", help_text='类别描述')
     # 分类级别
-    category_type = models.CharField(choices=CATEGORY_TYPE, verbose_name='类目级别', help_text='类目级别')
+    category_type = models.IntegerField(choices=CATEGORY_TYPE, verbose_name='类目级别', help_text='类目级别')
 
     # 这个self可以让这个外键指向自己
     # 通过relate_name 可以做1对多的反向查询
