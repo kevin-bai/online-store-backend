@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'user_operation.apps.UserOperationConfig',
     'goods.apps.GoodsConfig',
-    'trade.apps.TradeConfig'
+    'trade.apps.TradeConfig',
+    'crispy_forms',
+    'xadmin',
+    'guardian'
 ]
 
 MIDDLEWARE = [
@@ -127,7 +130,13 @@ USE_TZ = False  # 这里改成false，以后django取时间就不用世界时间
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 STATIC_URL = '/static/'
 
 # 设置 自定义的user 覆盖django默认的user
 AUTH_USER_MODEL = 'users.UserProfile'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

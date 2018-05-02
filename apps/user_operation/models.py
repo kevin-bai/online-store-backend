@@ -6,6 +6,7 @@ from trade.models import Goods
 
 User = get_user_model()
 
+
 class UserFav(models.Model):
     """
     用户收藏
@@ -36,7 +37,7 @@ class UserLeavingMessage(models.Model):
     )
     user = models.ForeignKey(User, verbose_name="用户")
     message_type = models.IntegerField(default=1, choices=MESSAGE_CHOICES, verbose_name="留言类型",
-                                      help_text=u"留言类型: 1(留言),2(投诉),3(询问),4(售后),5(求购)")
+                                       help_text=u"留言类型: 1(留言),2(投诉),3(询问),4(售后),5(求购)")
     subject = models.CharField(max_length=100, default="", verbose_name="主题")
     message = models.TextField(default="", verbose_name="留言内容", help_text="留言内容")
     file = models.FileField(upload_to="message/images/", verbose_name="上传的文件", help_text="上传的文件")
@@ -54,7 +55,7 @@ class UserAddress(models.Model):
     """
     用户收货地址
     """
-    user = models.ForeignKey(User, verbose_name="用户" )
+    user = models.ForeignKey(User, verbose_name="用户")
     province = models.CharField(max_length=100, default="", verbose_name="省份")
     city = models.CharField(max_length=100, default="", verbose_name="城市")
     district = models.CharField(max_length=100, default="", verbose_name="区域")
