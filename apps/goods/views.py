@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status, mixins, generics, viewsets
 from rest_framework.decorators import action
+from rest_framework import filters as rest_filter
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filters
 
@@ -86,5 +87,7 @@ class GoodsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Create
     queryset = Goods.objects.all().order_by('id')
     serializer_class = GoodsSerializerAll
     pagination_class = SmallResultsSetPagination
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, rest_filter.SearchFilter, rest_filter.OrderingFilter)
     filter_class = GoodsFilter
+    search_fields = ('name', 'goods_brief')
+    ordering_fields = ('id', 'shop_price', 'fav_num')
