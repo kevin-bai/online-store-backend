@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'trade.apps.TradeConfig',
     'crispy_forms',
     'xadmin',
-    'guardian'
+    'guardian',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', 'guardian.backends.ObjectPermissionBackend')
 
 ROOT_URLCONF = 'online_store_backend.urls'
 
