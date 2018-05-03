@@ -12,6 +12,8 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 
+from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination
+
 
 class GoodsListView(APIView):
     """
@@ -53,10 +55,12 @@ class GoodsListView2(mixins.ListModelMixin,
         return self.create(request, *args, **kwargs)
 
 
-class GoodsListView3(generics.ListAPIView,
-                     generics.CreateAPIView):
+class GoodsListView3(generics.ListCreateAPIView):
     """
     继承generics.ListAPIView
     """
-    queryset = Goods.objects.all()
+    queryset = Goods.objects.all()[:13]
+    # 序列化配置
     serializer_class = GoodsSerializerAll
+    # 分页配置
+    pagination_class = StandardResultsSetPagination
