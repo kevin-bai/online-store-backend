@@ -19,8 +19,15 @@ from django.views.static import serve
 import xadmin
 from online_store_backend.settings import MEDIA_ROOT
 from rest_framework.documentation import include_docs_urls
+from rest_framework.routers import DefaultRouter
 
-from goods.views import GoodsListView3
+from goods.views import GoodsListView3, GoodsViewSet
+
+router = DefaultRouter()
+# router 自动生成的url配置，get，post等是根据 GoodsViewSet里的mixin来生成的，比如：
+# ListModelMixin 就会生成get的配置，CreateModelMixin就是post
+router.register(r'goods', GoodsViewSet)
+
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     # media文件路径
@@ -29,5 +36,7 @@ urlpatterns = [
     url(r'^docs/', include_docs_urls(title="生鲜超市")),
     # DRF登录配置
     url(r'^api-auth/', include('rest_framework.urls')),
-    url(r'^goods/$',GoodsListView3.as_view(),name="goods-list")
+    # 路由注册
+    url(r'^', include(router.urls)),
+    # url(r'^goods/$', GoodsListView3.as_view()),
 ]

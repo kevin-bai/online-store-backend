@@ -8,9 +8,8 @@ from .models import Goods, GoodsCategory, GoodsCategoryBand, GoodsImage
 from .serializers import GoodsSerializer, GoodsSerializerAll
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import mixins
-from rest_framework import generics
+from rest_framework import status, mixins, generics, viewsets
+from rest_framework.decorators import action
 
 from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination
 
@@ -64,3 +63,12 @@ class GoodsListView3(generics.ListCreateAPIView):
     serializer_class = GoodsSerializerAll
     # 分页配置
     pagination_class = StandardResultsSetPagination
+
+
+class GoodsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    """
+    继承GenericViewSet
+    """
+    queryset = Goods.objects.all()[:17]
+    serializer_class = GoodsSerializerAll
+    pagination_class = SmallResultsSetPagination
