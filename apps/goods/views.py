@@ -8,8 +8,11 @@ from .models import Goods, GoodsCategory, GoodsCategoryBand, GoodsImage
 from .serializers import GoodsSerializer, GoodsSerializerAll
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import status, mixins, generics, viewsets
 from rest_framework.decorators import action
+from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as filters
 
 from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination
 
@@ -65,10 +68,23 @@ class GoodsListView3(generics.ListCreateAPIView):
     pagination_class = StandardResultsSetPagination
 
 
-class GoodsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+class GoodsFilter(filters.FilterSet):
+    # lookup_expr= 'gte' 相当于 order_by(xx__gte)   __后面跟着的操作
+    min_price = filters.NumberFilter(name='shop_price', lookup_expr='gte')
+    max_price = filters.NumberFilter(name='shop_price', lookup_expr='lte')
+    name = filters.CharFilter(name='name', lookup_expr='icontains')
+
+    class Meta:
+        model = Goods
+        fields = ['name', 'min_price', 'max_price']
+
+
+class GoodsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
     """
     继承GenericViewSet
     """
-    queryset = Goods.objects.all()[:17]
+    queryset = Goods.objects.all().order_by('id')
     serializer_class = GoodsSerializerAll
     pagination_class = SmallResultsSetPagination
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = GoodsFilter

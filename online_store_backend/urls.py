@@ -26,7 +26,7 @@ from goods.views import GoodsListView3, GoodsViewSet
 router = DefaultRouter()
 # router 自动生成的url配置，get，post等是根据 GoodsViewSet里的mixin来生成的，比如：
 # ListModelMixin 就会生成get的配置，CreateModelMixin就是post
-router.register(r'goods', GoodsViewSet)
+router.register(r'goods', GoodsViewSet,base_name='goods')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
