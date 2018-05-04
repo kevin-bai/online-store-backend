@@ -38,7 +38,7 @@ class GoodsCategory(models.Model):
         return self.name
 
 
-class GoodsCategoryBand(models.Model):
+class GoodsCategoryBrand(models.Model):
     """
     品牌名
     """

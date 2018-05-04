@@ -13,7 +13,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filters
 
 # Create your views here.
-from .models import Goods, GoodsCategory, GoodsCategoryBand, GoodsImage
+from .models import Goods, GoodsCategory, GoodsCategoryBrand, GoodsImage
 from .serializers import GoodsSerializer, GoodsSerializerAll,CategorySerializerAll
 from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination
 
@@ -103,5 +103,4 @@ class GoodsCategoryViewSet(mixins.ListModelMixin,
     """
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializerAll
-    pagination_class = StandardResultsSetPagination
     filter_backends = (DjangoFilterBackend,)

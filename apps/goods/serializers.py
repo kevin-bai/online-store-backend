@@ -4,7 +4,7 @@ __author__ = 'kevin'
 __date__ = '2018/5/2 17:26'
 
 from rest_framework import serializers
-from .models import Goods, GoodsImage, GoodsCategoryBand, GoodsCategory
+from .models import Goods, GoodsImage, GoodsCategoryBrand, GoodsCategory
 
 
 class GoodsSerializer(serializers.Serializer):
@@ -84,5 +84,5 @@ class GoodsImageSerializerAll(serializers.ModelSerializer):
 
 class GoodsCategoryBandSerializerALL(serializers.ModelSerializer):
     class Meta:
-        model = GoodsCategoryBand
+        model = GoodsCategoryBrand
         fields = '__all__'
