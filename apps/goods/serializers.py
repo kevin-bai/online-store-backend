@@ -33,7 +33,33 @@ class GoodsSerializer(serializers.Serializer):
         return instance
 
 
+class CategorySerializerAll3(serializers.ModelSerializer):
+    """
+    商品类别序列化3
+    """
+
+    class Meta:
+        model = GoodsCategory
+        fields = '__all__'
+
+
+class CategorySerializerAll2(serializers.ModelSerializer):
+    """
+    商品类别序列化2
+    """
+    sub_cat = CategorySerializerAll3(many=True)
+
+    class Meta:
+        model = GoodsCategory
+        fields = '__all__'
+
+
 class CategorySerializerAll(serializers.ModelSerializer):
+    """
+    商品类别序列化1
+    """
+    sub_cat = CategorySerializerAll2(many=True)
+
     class Meta:
         model = GoodsCategory
         fields = '__all__'

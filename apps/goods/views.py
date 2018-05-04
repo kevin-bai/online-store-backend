@@ -1,11 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-
-# Create your views here.
-from .models import Goods, GoodsCategory, GoodsCategoryBand, GoodsImage
-from .serializers import GoodsSerializer, GoodsSerializerAll
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -15,6 +12,9 @@ from rest_framework import filters as rest_filter
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filters
 
+# Create your views here.
+from .models import Goods, GoodsCategory, GoodsCategoryBand, GoodsImage
+from .serializers import GoodsSerializer, GoodsSerializerAll,CategorySerializerAll
 from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination
 
 
@@ -82,12 +82,24 @@ class GoodsFilter(filters.FilterSet):
 
 class GoodsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
     """
-    继承GenericViewSet
+    list:
+        商品列表展示
     """
     queryset = Goods.objects.all().order_by('id')
     serializer_class = GoodsSerializerAll
     pagination_class = SmallResultsSetPagination
     filter_backends = (DjangoFilterBackend, rest_filter.SearchFilter, rest_filter.OrderingFilter)
     filter_class = GoodsFilter
-    search_fields = ('name', 'goods_brief')
+    search_fields = ('=name', '^goods_brief')
     ordering_fields = ('id', 'shop_price', 'fav_num')
+
+
+class GoodsCategoryViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
+    """
+    list:
+        商品目录列表
+    """
+    queryset = GoodsCategory.objects.filter(category_type=1)
+    serializer_class = CategorySerializerAll
+    pagination_class = StandardResultsSetPagination
+    filter_backends = (DjangoFilterBackend,)
