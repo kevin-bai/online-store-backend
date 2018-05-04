@@ -21,13 +21,13 @@ from online_store_backend.settings import MEDIA_ROOT
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 
-from goods.views import  GoodsViewSet,GoodsCategoryViewSet
+from goods.views import GoodsViewSet, GoodsCategoryViewSet
 
 router = DefaultRouter()
 # router 自动生成的url配置，get，post等是根据 GoodsViewSet里的mixin来生成的，比如：
 # ListModelMixin 就会生成get的配置，CreateModelMixin就是post
 router.register(r'goods', GoodsViewSet, base_name='goods')
-router.register(r'goodsCategory',GoodsCategoryViewSet,base_name='goodsCategory')
+router.register(r'categorys', GoodsCategoryViewSet, base_name='goodsCategorys')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),

@@ -94,7 +94,9 @@ class GoodsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Create
     ordering_fields = ('id', 'shop_price', 'fav_num')
 
 
-class GoodsCategoryViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
+class GoodsCategoryViewSet(mixins.ListModelMixin,
+                           mixins.RetrieveModelMixin,
+                           viewsets.GenericViewSet):
     """
     list:
         商品目录列表
