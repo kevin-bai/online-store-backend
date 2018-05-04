@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
 
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -14,7 +15,7 @@ from django_filters import rest_framework as filters
 
 # Create your views here.
 from .models import Goods, GoodsCategory, GoodsCategoryBrand, GoodsImage
-from .serializers import GoodsSerializer, GoodsSerializerAll,CategorySerializerAll
+from .serializers import GoodsSerializer, GoodsSerializerAll, CategorySerializerAll
 from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination
 
 
@@ -69,21 +70,34 @@ class GoodsListView3(generics.ListCreateAPIView):
     pagination_class = StandardResultsSetPagination
 
 
+##########################################################################
+
+
 class GoodsFilter(filters.FilterSet):
     # lookup_expr= 'gte' 相当于 order_by(xx__gte)   __后面跟着的操作
     min_price = filters.NumberFilter(name='shop_price', lookup_expr='gte')
     max_price = filters.NumberFilter(name='shop_price', lookup_expr='lte')
     name = filters.CharFilter(name='name', lookup_expr='icontains')
+    top_category = filters.NumberFilter(method='top_category_filter')
+
+    # 查找某类别下的所有商品
+    # 自定义filter函数，参数是固定的
+    def top_category_filter(self, queryset, name, value):
+        return queryset.filter(Q(category_id=value) | Q(category__parent_category_id=value) | Q(
+            category__parent_category__parent_category_id=value))
 
     class Meta:
         model = Goods
         fields = ['name', 'min_price', 'max_price']
 
 
-class GoodsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+class GoodsViewSet(viewsets.GenericViewSet,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.CreateModelMixin):
     """
     list:
-        商品列表展示
+        商品列表页，分页，搜索，过滤，排序
     """
     queryset = Goods.objects.all().order_by('id')
     serializer_class = GoodsSerializerAll
