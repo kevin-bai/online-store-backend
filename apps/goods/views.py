@@ -115,6 +115,6 @@ class GoodsCategoryViewSet(mixins.ListModelMixin,
     list:
         商品目录列表
     """
-    queryset = GoodsCategory.objects.filter(category_type=1)
+    queryset = GoodsCategory.objects.filter()
     serializer_class = CategorySerializerAll
     filter_backends = (DjangoFilterBackend,)
