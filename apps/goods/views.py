@@ -114,7 +114,9 @@ class GoodsCategoryViewSet(mixins.ListModelMixin,
     """
     list:
         商品目录列表
+    retrieve:
+        获取商品分类详情
     """
-    queryset = GoodsCategory.objects.filter()
+    queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializerAll
     filter_backends = (DjangoFilterBackend,)
