@@ -104,8 +104,8 @@ class GoodsViewSet(viewsets.GenericViewSet,
     pagination_class = GoodsResultsSetPagination
     filter_backends = (DjangoFilterBackend, rest_filter.SearchFilter, rest_filter.OrderingFilter)
     filter_class = GoodsFilter
-    search_fields = ('=name', '^goods_brief')
-    ordering_fields = ('id', 'shop_price', 'fav_num')
+    search_fields = ('name', 'goods_brief')
+    ordering_fields = ('shop_price', 'sold_num')
 
 
 class GoodsCategoryViewSet(mixins.ListModelMixin,
