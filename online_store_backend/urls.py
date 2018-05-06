@@ -21,6 +21,7 @@ from online_store_backend.settings import MEDIA_ROOT
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
+from rest_framework_jwt.views import obtain_jwt_token
 
 from goods.views import GoodsViewSet, GoodsCategoryViewSet
 
@@ -40,7 +41,9 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls')),
     # 路由注册
     url(r'^', include(router.urls)),
-    # token获取地址
-    url(r'^api-token-auth/', views.obtain_auth_token)
+    # drf自带的token认证接口
+    url(r'^api-token-auth/', views.obtain_auth_token),
+    # json web token认证接口
+    url(r'^jwt-auth/', obtain_jwt_token),
     # url(r'^goods/$', GoodsListView3.as_view()),
 ]
