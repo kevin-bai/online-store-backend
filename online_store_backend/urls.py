@@ -44,6 +44,6 @@ urlpatterns = [
     # drf自带的token认证接口
     url(r'^api-token-auth/', views.obtain_auth_token),
     # json web token认证接口
-    url(r'^jwt-auth/', obtain_jwt_token),
+    url(r'^login/', obtain_jwt_token),
     # url(r'^goods/$', GoodsListView3.as_view()),
 ]

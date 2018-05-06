@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,6 +32,7 @@ DEBUG = True
 ALLOWED_HOSTS = "*"
 
 # Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,7 +66,12 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
-AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', 'guardian.backends.ObjectPermissionBackend')
+
+
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',  # 登录验证改成我自己的
+    'guardian.backends.ObjectPermissionBackend'
+)
 
 ROOT_URLCONF = 'online_store_backend.urls'
 
@@ -168,4 +175,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     )
+}
+
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),  # 过期时间
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
