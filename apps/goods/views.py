@@ -16,7 +16,7 @@ from django_filters import rest_framework as filters
 # Create your views here.
 from .models import Goods, GoodsCategory, GoodsCategoryBrand, GoodsImage
 from .serializers import GoodsSerializer, GoodsSerializerAll, CategorySerializerAll
-from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination
+from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination,GoodsResultsSetPagination
 
 
 class GoodsListView(APIView):
@@ -75,10 +75,10 @@ class GoodsListView3(generics.ListCreateAPIView):
 
 class GoodsFilter(filters.FilterSet):
     # lookup_expr= 'gte' 相当于 order_by(xx__gte)   __后面跟着的操作
-    min_price = filters.NumberFilter(name='shop_price', lookup_expr='gte')
-    max_price = filters.NumberFilter(name='shop_price', lookup_expr='lte')
+    pricemin = filters.NumberFilter(name='shop_price', lookup_expr='gte')
+    pricemax = filters.NumberFilter(name='shop_price', lookup_expr='lte')
     name = filters.CharFilter(name='name', lookup_expr='icontains')
-    top_category = filters.NumberFilter(method='top_category_filter')
+    top_category = filters.NumberFilter(method='top_category_filter', label='根据类别id筛选商品')
 
     # 查找某类别下的所有商品
     # 自定义filter函数，参数是固定的
@@ -88,7 +88,7 @@ class GoodsFilter(filters.FilterSet):
 
     class Meta:
         model = Goods
-        fields = ['name', 'min_price', 'max_price']
+        fields = ['name', 'pricemin', 'pricemin']
 
 
 class GoodsViewSet(viewsets.GenericViewSet,
@@ -101,11 +101,11 @@ class GoodsViewSet(viewsets.GenericViewSet,
     """
     queryset = Goods.objects.all().order_by('id')
     serializer_class = GoodsSerializerAll
-    pagination_class = SmallResultsSetPagination
+    pagination_class = GoodsResultsSetPagination
     filter_backends = (DjangoFilterBackend, rest_filter.SearchFilter, rest_filter.OrderingFilter)
     filter_class = GoodsFilter
-    search_fields = ('=name', '^goods_brief')
-    ordering_fields = ('id', 'shop_price', 'fav_num')
+    search_fields = ('name', 'goods_brief')
+    ordering_fields = ('shop_price', 'sold_num')
 
 
 class GoodsCategoryViewSet(mixins.ListModelMixin,
@@ -114,6 +114,8 @@ class GoodsCategoryViewSet(mixins.ListModelMixin,
     """
     list:
         商品目录列表
+    retrieve:
+        获取商品分类详情
     """
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializerAll
