@@ -67,7 +67,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-
 AUTHENTICATION_BACKENDS = (
     'users.views.CustomBackend',  # 登录验证改成我自己的
     'guardian.backends.ObjectPermissionBackend'
@@ -177,8 +176,10 @@ REST_FRAMEWORK = {
     )
 }
 
-
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),  # 过期时间
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
+
+# 云片网apikey
+yunpian_apikey = '473111e06a4d8399c2f2f4555b745cd4'

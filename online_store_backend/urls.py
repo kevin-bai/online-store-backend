@@ -24,12 +24,14 @@ from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 
 from goods.views import GoodsViewSet, GoodsCategoryViewSet
+from users.views import SmsCodeViewSet
 
 router = DefaultRouter()
 # router 自动生成的url配置，get，post等是根据 GoodsViewSet里的mixin来生成的，比如：
 # ListModelMixin 就会生成get的配置，CreateModelMixin就是post
 router.register(r'goods', GoodsViewSet, base_name='goods')
 router.register(r'categorys', GoodsCategoryViewSet, base_name='goodsCategorys')
+router.register(r'code', SmsCodeViewSet, base_name='code')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
