@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.contrib.auth import get_user_model
 from random import choice
 
-from rest_framework import mixins, generics, status
+from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
 
 from .serializers import SmsSerializer
@@ -24,7 +24,6 @@ class CustomBackend(ModelBackend):
         try:
             # 通过Q 实现查找的or操作， 用户可以用username 或者mobile登录
             user = User.objects.get(Q(username=username) | Q(mobile=username))
-            print('pass')
             # 通过user继承的AbstractUser中的方法
             if user.check_password(password):
                 return user
@@ -32,9 +31,11 @@ class CustomBackend(ModelBackend):
             return None
 
 
-class SmsCodeViewSet(mixins.CreateModelMixin, generics.GenericAPIView):
+class SmsCodeViewSet(mixins.CreateModelMixin,
+                     viewsets.GenericViewSet):
     """
-    发送短信验证码
+    create:
+        发送短信验证码
     """
     serializer_class = SmsSerializer
 
