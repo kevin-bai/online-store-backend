@@ -57,6 +57,7 @@ class UserRegSerializer(serializers.ModelSerializer):
                                      error_messages={
                                          'blank': '请输入验证码',
                                      })
+    password = serializers.CharField(required=True, style={'input_type': 'password'}, label="密码", write_only=True)
 
     def validate_code(self, code):
         """
@@ -90,6 +91,13 @@ class UserRegSerializer(serializers.ModelSerializer):
 
         return code
 
+    # 加密逻辑转移到signals
+    # def create(self, validated_data):
+    #     user = super().create(validated_data=validated_data)
+    #     user.set_password(validated_data["password"])
+    #     user.save()
+    #     return user
+
     def validate(self, attrs):
         # 不需要用户传递mobile，直接可以username赋值给mobile
         attrs['mobile'] = attrs['username']
@@ -102,4 +110,4 @@ class UserRegSerializer(serializers.ModelSerializer):
         model = User
         # username:这里用的userprofile继承了AbstractUser，username是必填项
         # code: 这个字段不在model里，我们在上面定义了，才能这么写
-        fields = ("username", "code", "mobile","password")
+        fields = ("username", "code", "mobile", "password")
