@@ -27,8 +27,8 @@ class GoodsCategory(models.Model):
                                         related_name='sub_cat')
     is_tab = models.BooleanField(default=False, verbose_name='是否导航', help_text='是否导航')
 
-    add_time = models.DateField(default=datetime.now, verbose_name='添加时间')
-    update_time = models.DateField(default=datetime.now, verbose_name='更改时间')
+    add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
+    update_time = models.DateTimeField(default=datetime.now, verbose_name='更改时间')
 
     class Meta:
         verbose_name = '商品类别'
@@ -46,8 +46,8 @@ class GoodsCategoryBrand(models.Model):
     desc = models.TextField(default="", verbose_name="品牌描述", help_text='品牌描述')
     image = models.ImageField(upload_to='brands/', max_length=150, verbose_name='商标图片')
 
-    add_time = models.DateField(default=datetime.now, verbose_name='添加时间')
-    update_time = models.DateField(default=datetime.now, verbose_name='更改时间')
+    add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
+    update_time = models.DateTimeField(default=datetime.now, verbose_name='更改时间')
 
     class Meta:
         verbose_name = '品牌名称'
@@ -79,7 +79,7 @@ class Goods(models.Model):
     is_hot = models.BooleanField(default=False, verbose_name="是否热销")
 
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
-    update_time = models.DateField(default=datetime.now, verbose_name='更改时间')
+    update_time = models.DateTimeField(default=datetime.now, verbose_name='更改时间')
 
     class Meta:
         verbose_name = '商品'
