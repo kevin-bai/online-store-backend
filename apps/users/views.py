@@ -68,8 +68,10 @@ class SmsCodeViewSet(mixins.CreateModelMixin,
                 'mobile': sms_status['msg']
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
-            code_record = VerifyCode(code=code,mobile=mobile)
+            # 验证码code保存数据库
+            code_record = VerifyCode(code=code, mobile=mobile)
             code_record.save()
+
             return Response({
                 'mobile': mobile
             }, status=status.HTTP_201_CREATED)

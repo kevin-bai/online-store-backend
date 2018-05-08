@@ -21,6 +21,7 @@ class YunPian(object):
 
         response = requests.post(self.single_send_url, data=params)
         return_dict = json.loads(response.text)
+        return return_dict
 
 
 if __name__ == "__main__":
