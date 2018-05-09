@@ -32,7 +32,7 @@ router = DefaultRouter()
 router.register(r'goods', GoodsViewSet, base_name='goods')
 router.register(r'categorys', GoodsCategoryViewSet, base_name='goodsCategorys')
 router.register(r'code', SmsCodeViewSet, base_name='code')
-router.register(r'user', UserViewSet, base_name='user')
+router.register(r'users', UserViewSet, base_name='user')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),

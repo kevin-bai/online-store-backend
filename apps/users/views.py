@@ -6,6 +6,7 @@ from random import choice
 
 from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
+from rest_framework_jwt.serializers import jwt_encode_handler,jwt_payload_handler
 
 from .serializers import SmsSerializer, UserRegSerializer
 from utils.yunpian import YunPian
@@ -89,3 +90,21 @@ class UserViewSet(mixins.CreateModelMixin,
     """
     serializer_class = UserRegSerializer
     queryset = User.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # 重写生成token
+        user = self.perform_create(serializer)
+        re_dict = serializer.data
+        payload = jwt_payload_handler(user)
+        re_dict["token"] = jwt_encode_handler(payload)
+        re_dict["name"] = user.username if user.username else user.mobile
+
+        headers = self.get_success_headers(serializer.data)
+        # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
+
+    # 这里原来只是save，我们需要拿到serializer，所以重载return
+    def perform_create(self, serializer):
+        return serializer.save()
