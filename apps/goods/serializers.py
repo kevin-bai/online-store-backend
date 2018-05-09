@@ -92,4 +92,4 @@ class GoodsCategoryBandSerializerALL(serializers.ModelSerializer):
 class BannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner
-        fields = ('image',)
+        fields = '__all__'
