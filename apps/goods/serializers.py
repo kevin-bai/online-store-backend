@@ -4,7 +4,7 @@ __author__ = 'kevin'
 __date__ = '2018/5/2 17:26'
 
 from rest_framework import serializers
-from .models import Goods, GoodsImage, GoodsCategoryBrand, GoodsCategory
+from .models import Goods, GoodsImage, GoodsCategoryBrand, GoodsCategory, Banner
 
 
 class GoodsSerializer(serializers.Serializer):
@@ -65,10 +65,17 @@ class CategorySerializerAll(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class GoodsImageSerializerAll(serializers.ModelSerializer):
+    class Meta:
+        model = GoodsImage
+        fields = ('image',)
+
+
 # 用ModelSerializer
 class GoodsSerializerAll(serializers.ModelSerializer):
     # 重写category外键，用上面的 CategorySerializer实例替代
     category = CategorySerializerAll()
+    images = GoodsImageSerializerAll(many=True)
 
     class Meta:
         model = Goods
@@ -76,13 +83,13 @@ class GoodsSerializerAll(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class GoodsImageSerializerAll(serializers.ModelSerializer):
-    class Meta:
-        model = GoodsImage
-        fields = '__all__'
-
-
 class GoodsCategoryBandSerializerALL(serializers.ModelSerializer):
     class Meta:
         model = GoodsCategoryBrand
         fields = '__all__'
+
+
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
+        fields = ('image',)

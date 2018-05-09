@@ -14,9 +14,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filters
 
 # Create your views here.
-from .models import Goods, GoodsCategory, GoodsCategoryBrand, GoodsImage
-from .serializers import GoodsSerializer, GoodsSerializerAll, CategorySerializerAll
-from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination,GoodsResultsSetPagination
+from .models import Goods, GoodsCategory, GoodsCategoryBrand, GoodsImage, Banner
+from .serializers import GoodsSerializer, GoodsSerializerAll, CategorySerializerAll, BannerSerializer
+from utils.DRF_PaginationSet import SmallResultsSetPagination, StandardResultsSetPagination, GoodsResultsSetPagination
 
 
 class GoodsListView(APIView):
@@ -120,3 +120,12 @@ class GoodsCategoryViewSet(mixins.ListModelMixin,
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializerAll
     filter_backends = (DjangoFilterBackend,)
+
+
+class BannerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    list:
+        首页轮播
+    """
+    queryset = Banner.objects.all()
+    serializer_class = BannerSerializer
