@@ -88,7 +88,7 @@ class GoodsFilter(filters.FilterSet):
 
     class Meta:
         model = Goods
-        fields = ['name', 'pricemin', 'pricemin']
+        fields = ['name', 'pricemin', 'pricemin','is_hot']
 
 
 class GoodsViewSet(viewsets.GenericViewSet,
