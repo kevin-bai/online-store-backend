@@ -108,3 +108,4 @@ class UserViewSet(mixins.CreateModelMixin,
     # 这里原来只是save，我们需要拿到serializer，所以重载return
     def perform_create(self, serializer):
         return serializer.save()
+

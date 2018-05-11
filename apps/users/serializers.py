@@ -111,3 +111,4 @@ class UserRegSerializer(serializers.ModelSerializer):
         # username:这里用的userprofile继承了AbstractUser，username是必填项
         # code: 这个字段不在model里，我们在上面定义了，才能这么写
         fields = ("username", "code", "mobile", "password")
+
