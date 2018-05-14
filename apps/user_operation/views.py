@@ -14,6 +14,7 @@ from utils.permissions import IsOwnerOrReadOnly
 class UserFavViewSet(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      mixins.DestroyModelMixin,
+                     mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     """
     list:
@@ -22,11 +23,15 @@ class UserFavViewSet(mixins.CreateModelMixin,
         创建用户收藏
     destroy:
         取消用户收藏
+    retrieve:
+        获取某个收藏信息
     """
     # queryset = UserFav.objects.all()
     serializer_class = UserFavSerializer
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    # 获取详情，查找的字段id改成goods_id
+    lookup_field = "goods_id"
 
     # 重载queryset，只获取当前用户的收藏
     def get_queryset(self):

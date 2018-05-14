@@ -74,8 +74,8 @@ class GoodsImageSerializerAll(serializers.ModelSerializer):
 # 用ModelSerializer
 class GoodsSerializerAll(serializers.ModelSerializer):
     # 重写category外键，用上面的 CategorySerializer实例替代
-    category = CategorySerializerAll()
-    images = GoodsImageSerializerAll(many=True)
+    category = CategorySerializerAll(help_text="商品种类id")
+    images = GoodsImageSerializerAll(many=True,help_text='商品轮播图片')
 
     class Meta:
         model = Goods
