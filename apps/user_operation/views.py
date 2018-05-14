@@ -6,8 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 
-from .serializers import UserFavSerializer
-from .models import UserFav
+from .serializers import UserFavSerializer,UserMessageSerializer
+from .models import UserFav,UserLeavingMessage
 from utils.permissions import IsOwnerOrReadOnly
 
 
@@ -36,3 +36,23 @@ class UserFavViewSet(mixins.CreateModelMixin,
     # 重载queryset，只获取当前用户的收藏
     def get_queryset(self):
         return UserFav.objects.filter(user=self.request.user)
+
+
+class UserMessageViewSet(mixins.ListModelMixin,
+                         mixins.CreateModelMixin,
+                         mixins.DestroyModelMixin,
+                         viewsets.GenericViewSet):
+    """
+    list:
+        获取用户留言信息
+    create:
+        添加留言
+    destroy:
+        删除用户留言
+    """
+    serializer_class = UserMessageSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+
+    def get_queryset(self):
+        return UserLeavingMessage.objects.filter(user=self.request.user)

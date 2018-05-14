@@ -5,7 +5,7 @@ __date__ = '2018/5/11 10:16'
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework import serializers
 
-from .models import UserFav
+from .models import UserFav, UserLeavingMessage
 
 
 class UserFavSerializer(serializers.ModelSerializer):
@@ -27,3 +27,14 @@ class UserFavSerializer(serializers.ModelSerializer):
 
         # 要删除功能，必须加id字段
         fields = ("user", "goods", "id")
+
+
+class UserMessageSerializer(serializers.ModelSerializer):
+    """
+    用户留言
+    """
+    message_type = serializers.IntegerField()
+
+    class Meta:
+        model = UserLeavingMessage
+        fields = ("id", "message_type", "subject", "message", "file", "user")
