@@ -112,3 +112,11 @@ class UserRegSerializer(serializers.ModelSerializer):
         # code: 这个字段不在model里，我们在上面定义了，才能这么写
         fields = ("username", "code", "mobile", "password")
 
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    """
+    用户详细信息
+    """
+    class Meta:
+        model = User
+        fields = ("username", "birthday", "gender", "email", "nick_name", "mobile",)

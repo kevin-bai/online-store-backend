@@ -4,11 +4,14 @@ from django.db.models import Q
 from django.contrib.auth import get_user_model
 from random import choice
 
-from rest_framework import mixins, viewsets, status
+from rest_framework import mixins, viewsets, status,permissions
 from rest_framework.response import Response
-from rest_framework_jwt.serializers import jwt_encode_handler,jwt_payload_handler
+from rest_framework_jwt.serializers import jwt_encode_handler, jwt_payload_handler
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.authentication import SessionAuthentication
 
-from .serializers import SmsSerializer, UserRegSerializer
+
+from .serializers import SmsSerializer, UserRegSerializer, UserDetailSerializer
 from utils.yunpian import YunPian
 from online_store_backend.settings import yunpian_apikey
 from .models import VerifyCode
@@ -83,17 +86,40 @@ class SmsCodeViewSet(mixins.CreateModelMixin,
 
 
 class UserViewSet(mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
                   viewsets.GenericViewSet):
     """
     create:
         注册用户
     """
-    serializer_class = UserRegSerializer
     queryset = User.objects.all()
+    serializer_class = UserRegSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (JSONWebTokenAuthentication,SessionAuthentication)
+
+    # 重写permission，注册不需要权限，获取需要已登录权限
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return [permissions.IsAuthenticated()]
+        elif self.action == 'create':
+            return []
+        else:
+            return []
+
+    # 重写serializer_class,retrieve的时候返回字段，按照UserDetailSerializer来
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return UserDetailSerializer
+        elif self.action == 'create':
+            return UserRegSerializer
+        else:
+            return UserRegSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        # self.perform_create(serializer)
+
         # 重写生成token
         user = self.perform_create(serializer)
         re_dict = serializer.data
@@ -105,7 +131,11 @@ class UserViewSet(mixins.CreateModelMixin,
         # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
 
-    # 这里原来只是save，我们需要拿到serializer，所以重载return
+    # 这里原来只是save，我们需要拿到serializer，所以重写 以获取 serializer的返回，即user
     def perform_create(self, serializer):
         return serializer.save()
 
+    # retrieve 和delete都会用到
+    # eg: users/{user_id}   返回 user
+    def get_object(self):
+        return self.request.user

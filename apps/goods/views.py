@@ -75,10 +75,11 @@ class GoodsListView3(generics.ListCreateAPIView):
 
 class GoodsFilter(filters.FilterSet):
     # lookup_expr= 'gte' 相当于 order_by(xx__gte)   __后面跟着的操作
-    pricemin = filters.NumberFilter(name='shop_price', lookup_expr='gte')
-    pricemax = filters.NumberFilter(name='shop_price', lookup_expr='lte')
+    pricemin = filters.NumberFilter(name='shop_price', lookup_expr='gte', help_text="最小价格")
+    pricemax = filters.NumberFilter(name='shop_price', lookup_expr='lte', help_text="最小价格")
     name = filters.CharFilter(name='name', lookup_expr='icontains')
     top_category = filters.NumberFilter(method='top_category_filter', label='根据类别id筛选商品')
+    is_hot = filters.BooleanFilter(help_text="是否热销")
 
     # 查找某类别下的所有商品
     # 自定义filter函数，参数是固定的
@@ -88,7 +89,7 @@ class GoodsFilter(filters.FilterSet):
 
     class Meta:
         model = Goods
-        fields = ['name', 'pricemin', 'pricemin','is_hot']
+        fields = ['name', 'pricemin', 'pricemin', 'is_hot']
 
 
 class GoodsViewSet(viewsets.GenericViewSet,
