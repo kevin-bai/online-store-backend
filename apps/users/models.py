@@ -7,7 +7,7 @@ class UserProfile(AbstractUser):
     """
     用户
     """
-    nick_name = models.CharField(max_length=20, null=True, blank=True, verbose_name='用户名')
+    nick_name = models.CharField(max_length=20, null=True, blank=True, verbose_name='用户昵称')
     birthday = models.DateField(null=True, blank=True, verbose_name='生日')
     mobile = models.CharField(null=True, blank=True, max_length=11, verbose_name='手机')
     gender = models.CharField(max_length=6, choices=(('male', '男'), ('female', '女')), default='male', verbose_name='性别')

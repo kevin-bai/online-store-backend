@@ -87,10 +87,15 @@ class SmsCodeViewSet(mixins.CreateModelMixin,
 
 class UserViewSet(mixins.CreateModelMixin,
                   mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
                   viewsets.GenericViewSet):
     """
     create:
         注册用户
+    retrieve:
+        获取用户信息
+    update:
+        修改用户信息
     """
     queryset = User.objects.all()
     serializer_class = UserRegSerializer
@@ -113,7 +118,7 @@ class UserViewSet(mixins.CreateModelMixin,
         elif self.action == 'create':
             return UserRegSerializer
         else:
-            return UserRegSerializer
+            return UserDetailSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
