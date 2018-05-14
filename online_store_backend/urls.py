@@ -25,7 +25,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 from goods.views import GoodsViewSet, GoodsCategoryViewSet, BannerViewSet
 from users.views import SmsCodeViewSet, UserViewSet
-from user_operation.views import UserFavViewSet, UserMessageViewSet
+from user_operation.views import UserFavViewSet, UserMessageViewSet,UserAddressViewSet
 
 router = DefaultRouter()
 # router 自动生成的url配置，get，post等是根据 GoodsViewSet里的mixin来生成的，比如：
@@ -38,6 +38,8 @@ router.register(r'banners', BannerViewSet, base_name='banners')
 router.register(r'userfavs', UserFavViewSet, base_name='userfavs')
 # 留言
 router.register(r'messages', UserMessageViewSet, base_name='user_message')
+# 地址
+router.register(r'address', UserAddressViewSet, base_name='user_address')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
