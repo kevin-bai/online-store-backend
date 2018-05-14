@@ -30,11 +30,15 @@ class UserFavSerializer(serializers.ModelSerializer):
 
 
 class UserMessageSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+    message_type = serializers.IntegerField(help_text=u"留言类型: 1(留言),2(投诉),3(询问),4(售后),5(求购)")
+    add_time = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     """
     用户留言
     """
-    message_type = serializers.IntegerField()
 
     class Meta:
         model = UserLeavingMessage
-        fields = ("id", "message_type", "subject", "message", "file", "user")
+        fields = ("id", "message_type", "subject", "message", "file", "user", "add_time")

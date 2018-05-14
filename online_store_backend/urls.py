@@ -36,6 +36,7 @@ router.register(r'code', SmsCodeViewSet, base_name='code')
 router.register(r'users', UserViewSet, base_name='user')
 router.register(r'banners', BannerViewSet, base_name='banners')
 router.register(r'userfavs', UserFavViewSet, base_name='userfavs')
+# 留言
 router.register(r'messages', UserMessageViewSet, base_name='user_message')
 
 urlpatterns = [
