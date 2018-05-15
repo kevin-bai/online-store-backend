@@ -39,7 +39,7 @@ router.register(r'userfavs', UserFavViewSet, base_name='userfavs')
 # 留言
 router.register(r'messages', UserMessageViewSet, base_name='user_message')
 # 地址
-router.register(r'address', UserAddressViewSet, base_name='user_address')
+router.register(r'address', UserAddressViewSet, base_name='address')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),

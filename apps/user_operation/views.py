@@ -51,28 +51,27 @@ class UserMessageViewSet(mixins.ListModelMixin,
         删除用户留言
     """
     serializer_class = UserMessageSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
 
     def get_queryset(self):
         return UserLeavingMessage.objects.filter(user=self.request.user)
 
 
-class UserAddressViewSet(mixins.CreateModelMixin,
-                         mixins.ListModelMixin,
-                         mixins.DestroyModelMixin,
-                         viewsets.GenericViewSet):
+class UserAddressViewSet(viewsets.ModelViewSet):
     """
     list:
-        获取地址信息
+        获取收货地址信息
     create:
-        添加地址
+        添加收货地址
+    update:
+        更新收货地址
     destroy:
-        删除地址
+        删除收货地址
     """
-    serializer_class = UserAddressSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = UserAddressSerializer
 
     def get_queryset(self):
         return UserAddress.objects.filter(user=self.request.user)

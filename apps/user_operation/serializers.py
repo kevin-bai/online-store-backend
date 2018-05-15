@@ -45,11 +45,15 @@ class UserMessageSerializer(serializers.ModelSerializer):
 
 
 class UserAddressSerializer(serializers.ModelSerializer):
+    """
+    收货地址
+    """
     user = serializers.HiddenField(
-        default=serializers.CurrentUserDefault
+        default=serializers.CurrentUserDefault()
     )
     add_time = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
 
     class Meta:
         model = UserAddress
-        fields = ("user", "province", "city", "district", "address", "signer_name", "signer_mobile", "add_time")
+        fields = ("id", "user", "province", "city", "district", "address", "signer_name",
+                  "signer_mobile", "add_time")
