@@ -6,7 +6,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 
 from utils.permissions import IsOwnerOrReadOnly
-from .serializers import ShoppingCartSerializer, ShoppingCartDetailSerializer,OrderSerializer
+from .serializers import ShoppingCartSerializer, ShoppingCartDetailSerializer, OrderSerializer
 from .models import ShoppingCart, OrderInfo, OrderGoods
 
 
@@ -67,6 +67,7 @@ class OrderViewSet(mixins.CreateModelMixin,
             order_goods.order = order
             order_goods.goods_num = shopcart.nums
             order_goods.save()
+            shopcart.delete()
 
-        shopcarts.delete()
+        # shopcarts.delete()
         return order

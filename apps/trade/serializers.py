@@ -5,7 +5,7 @@ __date__ = '2018/5/15 16:05'
 
 from rest_framework import serializers
 
-from .models import ShoppingCart,OrderInfo
+from .models import ShoppingCart, OrderInfo
 from goods.models import Goods
 from goods.serializers import GoodsSerializerAll
 
@@ -65,19 +65,21 @@ class OrderSerializer(serializers.ModelSerializer):
     trade_no = serializers.CharField(read_only=True)
     order_sn = serializers.CharField(read_only=True)
     pay_status = serializers.CharField(read_only=True)
+    pay_time = serializers.DateTimeField(read_only=True)
 
     def generator_order_sn(self):
         # 时间+userid+随机字符串
         import time
         from random import Random
         random_ins = Random()
-        order_sn = "{time_str}{user_id}{random_str}".format(time_str=time.strftime("%Y%m%d%h%m%s"),
+        order_sn = "{time_str}{user_id}{random_str}".format(time_str=time.strftime("%Y%m%d%H%M%S"),
                                                             user_id=self.context["request"].user.id,
-                                                            random_str=random_ins.randint(10,99))
+                                                            random_str=random_ins.randint(10, 99))
         return order_sn
 
     def validate(self, attrs):
         attrs["order_sn"] = self.generator_order_sn()
+        return attrs
 
     class Meta:
         model = OrderInfo
