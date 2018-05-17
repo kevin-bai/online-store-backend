@@ -5,7 +5,7 @@ __date__ = '2018/5/15 16:05'
 
 from rest_framework import serializers
 
-from .models import ShoppingCart, OrderInfo
+from .models import ShoppingCart, OrderInfo, OrderGoods
 from goods.models import Goods
 from goods.serializers import GoodsSerializerAll
 
@@ -84,3 +84,23 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderInfo
         fields = "__all__"
+
+
+class OrderGoodsSerializer(serializers.ModelSerializer):
+    goods = GoodsSerializerAll(many=False)
+
+    class Meta:
+        model = OrderGoods
+        fields = "__all__"
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    # 根据relate_name 取得
+    # 本身OrderInfo 没有goods这个字段，但是OrderGoods有goods这个外键和order这个外键，通过relate_name 连接到
+    OrderGoods = OrderGoodsSerializer(many=True)
+
+    class Meta:
+        model = OrderInfo
+        fields = "__all__"
+
+

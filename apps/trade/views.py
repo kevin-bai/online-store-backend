@@ -6,7 +6,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 
 from utils.permissions import IsOwnerOrReadOnly
-from .serializers import ShoppingCartSerializer, ShoppingCartDetailSerializer, OrderSerializer
+from .serializers import ShoppingCartSerializer, ShoppingCartDetailSerializer, OrderSerializer,OrderDetailSerializer
 from .models import ShoppingCart, OrderInfo, OrderGoods
 
 
@@ -51,12 +51,18 @@ class OrderViewSet(mixins.CreateModelMixin,
     destroy:
         删除订单
     """
-    serializer_class = OrderSerializer
+    # serializer_class = OrderSerializer
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
 
     def get_queryset(self):
         return OrderInfo.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return OrderDetailSerializer
+        else:
+            return OrderSerializer
 
     def perform_create(self, serializer):
         order = serializer.save()
