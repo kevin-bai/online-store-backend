@@ -26,7 +26,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 from goods.views import GoodsViewSet, GoodsCategoryViewSet, BannerViewSet
 from users.views import SmsCodeViewSet, UserViewSet
 from user_operation.views import UserFavViewSet, UserMessageViewSet,UserAddressViewSet
-from trade.views import ShoppingCartViewSet
+from trade.views import ShoppingCartViewSet,OrderViewSet
 
 router = DefaultRouter()
 # router 自动生成的url配置，get，post等是根据 GoodsViewSet里的mixin来生成的，比如：
@@ -43,6 +43,8 @@ router.register(r'messages', UserMessageViewSet, base_name='user_message')
 router.register(r'address', UserAddressViewSet, base_name='address')
 # 购物车
 router.register(r'shopcarts', ShoppingCartViewSet, base_name='shopcarts')
+# 订单
+router.register(r'orders', OrderViewSet, base_name='orders')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),

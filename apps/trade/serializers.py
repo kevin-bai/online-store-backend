@@ -5,7 +5,7 @@ __date__ = '2018/5/15 16:05'
 
 from rest_framework import serializers
 
-from .models import ShoppingCart
+from .models import ShoppingCart,OrderInfo
 from goods.models import Goods
 from goods.serializers import GoodsSerializerAll
 
@@ -20,10 +20,11 @@ class ShoppingCartDetailSerializer(serializers.ModelSerializer):
 
 class ShoppingCartSerializer(serializers.Serializer):
     """
-    这里不用ModelSerializer,因为当点击加入购物车，此时购物车列表已经存在，这个记录。我们model里面写了unique_together = ("user", "goods")
-    那么会直接抛异常，而我们希望这个记录数量加1
-    所以要自己控制
+    购物车
     """
+    # 这里不用ModelSerializer,因为当点击加入购物车，此时购物车列表已经存在，这个记录。我们model里面写了unique_together = ("user", "goods")
+    # 那么会直接抛异常，而我们希望这个记录数量加1
+    # 所以要自己控制
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
@@ -56,3 +57,28 @@ class ShoppingCartSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+
+class OrderSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+    trade_no = serializers.CharField(read_only=True)
+    order_sn = serializers.CharField(read_only=True)
+    pay_status = serializers.CharField(read_only=True)
+
+    def generator_order_sn(self):
+        # 时间+userid+随机字符串
+        import time
+        from random import Random
+        random_ins = Random()
+        order_sn = "{time_str}{user_id}{random_str}".format(time_str=time.strftime("%Y%m%d%h%m%s"),
+                                                            user_id=self.context["request"].user.id,
+                                                            random_str=random_ins.randint(10,99))
+        return order_sn
+
+    def validate(self, attrs):
+        attrs["order_sn"] = self.generator_order_sn()
+
+    class Meta:
+        model = OrderInfo
+        fields = "__all__"

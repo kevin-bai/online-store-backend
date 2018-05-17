@@ -6,8 +6,8 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 
 from utils.permissions import IsOwnerOrReadOnly
-from .serializers import ShoppingCartSerializer,ShoppingCartDetailSerializer
-from .models import ShoppingCart
+from .serializers import ShoppingCartSerializer, ShoppingCartDetailSerializer,OrderSerializer
+from .models import ShoppingCart, OrderInfo, OrderGoods
 
 
 class ShoppingCartViewSet(viewsets.ModelViewSet):
@@ -35,3 +35,38 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return ShoppingCart.objects.filter(user=self.request.user)
+
+
+class OrderViewSet(mixins.CreateModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.DestroyModelMixin,
+                   viewsets.GenericViewSet):
+    """
+    订单
+    list:
+        订单列表
+    retrieve:
+        订单详细信息
+    destroy:
+        删除订单
+    """
+    serializer_class = OrderSerializer
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+
+    def get_queryset(self):
+        return OrderInfo.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        order = serializer.save()
+        shopcarts = ShoppingCart.objects.filter(user=self.request.user)
+        for shopcart in shopcarts:
+            order_goods = OrderGoods()
+            order_goods.goods = shopcart.goods
+            order_goods.order = order
+            order_goods.goods_num = shopcart.nums
+            order_goods.save()
+
+        shopcarts.delete()
+        return order
