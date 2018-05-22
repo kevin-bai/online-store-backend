@@ -27,6 +27,7 @@ class AliPay(object):
         self.app_private_key_path = app_private_key_path
         self.app_private_key = None
         self.return_url = return_url
+        self.alipay_public_key = None
         with open(self.app_private_key_path) as fp:
             self.app_private_key = RSA.importKey(fp.read())
 
@@ -76,7 +77,6 @@ class AliPay(object):
         unsigned_items = self.ordered_data(data)
         unsigned_string = "&".join("{0}={1}".format(k, v) for k, v in unsigned_items)
         sign = self.sign(unsigned_string.encode("utf-8"))
-        # ordered_items = self.ordered_data(data)
         quoted_string = "&".join("{0}={1}".format(k, quote_plus(v)) for k, v in unsigned_items)
 
         # 获得最终的订单信息字符串
